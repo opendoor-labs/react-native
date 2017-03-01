@@ -69,7 +69,9 @@ var TouchableOpacity = React.createClass({
   getInitialState: function() {
     return {
       ...this.touchableGetInitialState(),
-      anim: new Animated.Value(1),
+      anim: new Animated.Value(
+        this._getChildStyleOpacityWithDefault()
+      ),
     };
   },
 
@@ -155,11 +157,15 @@ var TouchableOpacity = React.createClass({
   _opacityInactive: function() {
     this.clearTimeout(this._hideTimeout);
     this._hideTimeout = null;
-    var childStyle = flattenStyle(this.props.style) || {};
     this.setOpacityTo(
-      childStyle.opacity === undefined ? 1 : childStyle.opacity,
+      this._getChildStyleOpacityWithDefault(),
       150
     );
+  },
+
+  _getChildStyleOpacityWithDefault: function() {
+    var childStyle = flattenStyle(this.props.style) || {};
+    return childStyle.opacity === undefined ? 1 : childStyle.opacity;
   },
 
   render: function() {
